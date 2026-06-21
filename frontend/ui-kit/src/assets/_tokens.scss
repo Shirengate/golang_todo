@@ -1,0 +1,45 @@
+:root {
+    color-scheme: light dark;
+
+    /* --- BACKGROUNDS (Фоны) --- */
+    /* Основной фон страницы */
+    --ui-bg-main: #{light-dark(#efedea, #1a2b21)};
+    /* Поверхности: карточки, модалки, боковые панели */
+    --ui-bg-surface: #{light-dark(#ffffff, #223a2c)};
+    /* Второстепенные элементы: инпуты, теги, баджи */
+    --ui-bg-soft: #{light-dark(#e4e2df, #2d4d3a)};
+
+    /* --- TEXT (Текст) --- */
+    /* Основной текст */
+    --ui-text-main: #{light-dark(#333b3c, #efefec)};
+    /* Второстепенный текст (подписи, дескрипторы) */
+    --ui-text-muted: #{light-dark(#667072, #a0ada0)};
+    /* Текст на контрастном фоне (например, на кнопках) */
+    --ui-text-on-primary: #{light-dark(#ffffff, #1a2b21)};
+
+    /* --- BRAND & ACCENTS (Акценты) --- */
+    --ui-primary: #{light-dark(#005ecb, #4da3ff)};
+    --ui-primary-hover: #{light-dark(#004a9e, #80bfff)};
+    /* Вторичные кнопки или активные элементы */
+    --ui-secondary: #{light-dark(#5c6b6d, #8ea899)};
+
+    /* --- BORDERS & DIVIDERS (Границы) --- */
+    --ui-border: #{light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.12))};
+    --ui-border-strong: #{light-dark(
+            rgba(0, 0, 0, 0.2),
+            rgba(255, 255, 255, 0.25)
+        )};
+
+    /* --- STATES (Статусы) --- */
+    --ui-success: #{light-dark(#2e7d32, #66bb6a)};
+    --ui-error: #{light-dark(#d32f2f, #f44336)};
+    --ui-warning: #{light-dark(#ed6c02, #ffa726)};
+    --ui-info: #{light-dark(#0288d1, #29b6f6)};
+
+    /* --- INTERACTIVE (Интерактив) --- */
+    /* Цвет при наведении на прозрачные элементы */
+    --ui-ghost-hover: #{light-dark(
+            rgba(0, 0, 0, 0.05),
+            rgba(255, 255, 255, 0.05)
+        )};
+}
