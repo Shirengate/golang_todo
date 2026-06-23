@@ -1,5 +1,35 @@
 import clsx from "clsx";
 import styles from "./Button.module.scss";
-export const Button = () => {
-  return <div className={clsx(styles.button)}>Button</div>;
+import type { FC, ButtonHTMLAttributes } from "react";
+
+type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
+type ButtonSize = "sm" | "md" | "lg";
+
+interface OwnProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  fullWidth?: boolean;
+}
+
+export const Button: FC<OwnProps> = ({
+  variant = "primary",
+  size = "md",
+  fullWidth = false,
+  className,
+  children,
+  ...rest
+}) => {
+  const classes = clsx(
+    styles.button,
+    styles[variant],
+    styles[size],
+    { [styles.fullWidth]: fullWidth },
+    className,
+  );
+
+  return (
+    <button {...rest} className={classes}>
+      {children}
+    </button>
+  );
 };
