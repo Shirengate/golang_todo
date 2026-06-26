@@ -1,0 +1,114 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-family: sans-serif;
+    width: fit-content;
+
+    &.fullWidth {
+        width: 100%;
+    }
+
+    &.disabled {
+        opacity: 0.6;
+        pointer-events: none;
+    }
+}
+
+.label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ui-text-main);
+}
+
+.inputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input {
+    width: 100%;
+    outline: none;
+    border-radius: var(--ui-border-radius);
+    padding: 10px 12px;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    color: var(--ui-text-main);
+    background-color: transparent;
+    border: 1px solid transparent;
+
+    &::placeholder {
+        color: var(--ui-text-muted);
+    }
+
+    /* Варианты */
+    &.outline {
+        border-color: var(--ui-border);
+        background-color: var(--ui-bg-surface);
+
+        &:focus {
+            border-color: var(--ui-primary);
+            box-shadow: 0 0 0 2px var(--ui-ghost-hover);
+        }
+    }
+
+    &.filled {
+        background-color: var(--ui-bg-soft);
+        border-color: transparent;
+
+        &:focus {
+            background-color: var(--ui-bg-surface);
+            border-color: var(--ui-primary);
+        }
+    }
+
+    &.ghost {
+        border-color: transparent;
+        &:hover {
+            background-color: var(--ui-ghost-hover);
+        }
+        &:focus {
+            border-color: var(--ui-primary);
+        }
+    }
+
+    /* Состояние ошибки */
+    &.error {
+        border-color: var(--ui-error) !important;
+
+        &:focus {
+            box-shadow: 0 0 0 2px rgba(211, 47, 47, 0.2);
+        }
+    }
+
+    /* Отступы для иконок */
+    &.withLeftIcon {
+        padding-left: 40px;
+    }
+    &.withRightIcon {
+        padding-right: 40px;
+    }
+}
+
+.iconLeft,
+.iconRight {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ui-text-muted);
+    width: 32px;
+}
+
+.iconLeft {
+    left: 8px;
+}
+.iconRight {
+    right: 8px;
+}
+
+.errorMessage {
+    font-size: 12px;
+    color: var(--ui-error);
+}

@@ -29,6 +29,7 @@
             rgba(0, 0, 0, 0.2),
             rgba(255, 255, 255, 0.25)
         )};
+    --ui-border-radius: 8px;
 
     /* --- STATES (Статусы) --- */
     --ui-success: #{light-dark(#2e7d32, #66bb6a)};

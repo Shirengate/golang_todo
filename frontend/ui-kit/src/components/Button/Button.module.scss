@@ -5,7 +5,7 @@
     gap: 8px;
 
     border: 1px solid transparent;
-    border-radius: 8px; // Можно вынести в --ui-radius-md
+    border-radius: var(--ui-border-radius);
 
     font-family: inherit;
     font-weight: 500;
