@@ -6,7 +6,7 @@ import {
 } from "react";
 import clsx from "clsx";
 import styles from "./Input.module.scss";
-
+import { createUIComponent } from "../ThemeProvider/utils";
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string | boolean;
@@ -16,7 +16,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   rightIcon?: ReactNode;
 }
 
-export const Input: FC<InputProps> = ({
+const Input_: FC<InputProps> = ({
   label,
   error,
   variant = "outline",
@@ -74,3 +74,4 @@ export const Input: FC<InputProps> = ({
     </div>
   );
 };
+export const Input = createUIComponent(Input_);
