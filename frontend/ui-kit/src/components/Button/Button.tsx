@@ -11,26 +11,28 @@ interface OwnProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth?: boolean;
 }
 
-const Button_: FC<OwnProps> = ({
-  variant = "primary",
-  size = "md",
-  fullWidth = false,
-  className,
-  children,
-  ...rest
-}) => {
-  const classes = clsx(
-    styles.button,
-    styles[variant],
-    styles[size],
-    { [styles.fullWidth]: fullWidth },
+const Button_: FC<OwnProps> = createUIComponent(
+  ({
+    variant = "primary",
+    size = "md",
+    fullWidth = false,
     className,
-  );
+    children,
+    ...rest
+  }) => {
+    const classes = clsx(
+      styles.button,
+      styles[variant],
+      styles[size],
+      { [styles.fullWidth]: fullWidth },
+      className,
+    );
 
-  return (
-    <button {...rest} className={classes}>
-      {children}
-    </button>
-  );
-};
-export const Button = createUIComponent(Button_);
+    return (
+      <button {...rest} className={classes}>
+        {children}
+      </button>
+    );
+  },
+);
+export const Button = Button_;
