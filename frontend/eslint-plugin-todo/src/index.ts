@@ -1,4 +1,4 @@
-import createComponent from "./rules/create-component";
+import { createComponent } from "./rules/create-component";
 
 const plugin = {
   meta: {
