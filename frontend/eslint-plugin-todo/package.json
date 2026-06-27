@@ -1,5 +1,5 @@
 {
-  "name": "eslint-plugin-todo",
+  "name": "@gobs/eslint-plugin-todo",
   "version": "1.0.0",
   "description": "ESLint plugin for enforcing todo app conventions",
   "main": "dist/index.js",
