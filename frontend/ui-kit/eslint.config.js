@@ -18,14 +18,22 @@ export default defineConfig([
       reactHooks.configs.flat.recommended,
       reactRefresh.configs.vite,
     ],
+    languageOptions: {
+      globals: globals.browser,
+    },
+  },
+  {
+    files: ["src/components/**/*.{ts,tsx}"],
+    ignores: [
+      "src/components/**/*.stories.tsx",
+      "src/components/index.ts",
+      "src/components/ThemeProvider/**/*",
+    ],
     plugins: {
       todo: todoEslint.default || todoEslint,
     },
     rules: {
       "todo/create-component": "error",
-    },
-    languageOptions: {
-      globals: globals.browser,
     },
   },
   ...storybook.configs["flat/recommended"],

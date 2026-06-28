@@ -16,62 +16,63 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   rightIcon?: ReactNode;
 }
 
-const Input_: FC<InputProps> = ({
-  label,
-  error,
-  variant = "outline",
-  fullWidth,
-  leftIcon,
-  rightIcon,
-  className,
-  id,
-  disabled,
-  ...props
-}) => {
-  const generatedId = useId();
-  const inputId = id || generatedId;
-  const isError = Boolean(error);
-
-  const rootClasses = clsx(
-    styles.container,
-    fullWidth && styles.fullWidth,
-    disabled && styles.disabled,
+export const Input: FC<InputProps> = createUIComponent(
+  ({
+    label,
+    error,
+    variant = "outline",
+    fullWidth,
+    leftIcon,
+    rightIcon,
     className,
-  );
+    id,
+    disabled,
+    ...props
+  }) => {
+    const generatedId = useId();
+    const inputId = id || generatedId;
+    const isError = Boolean(error);
 
-  const inputClasses = clsx(
-    styles.input,
-    styles[variant],
-    isError && styles.error,
-    leftIcon && styles.withLeftIcon,
-    rightIcon && styles.withRightIcon,
-  );
+    const rootClasses = clsx(
+      styles.container,
+      fullWidth && styles.fullWidth,
+      disabled && styles.disabled,
+      className,
+    );
 
-  return (
-    <div className={rootClasses}>
-      {label && (
-        <label htmlFor={inputId} className={styles.label}>
-          {label}
-        </label>
-      )}
+    const inputClasses = clsx(
+      styles.input,
+      styles[variant],
+      isError && styles.error,
+      leftIcon && styles.withLeftIcon,
+      rightIcon && styles.withRightIcon,
+    );
 
-      <div className={styles.inputWrapper}>
-        {leftIcon && <span className={styles.iconLeft}>{leftIcon}</span>}
+    return (
+      <div className={rootClasses}>
+        {label && (
+          <label htmlFor={inputId} className={styles.label}>
+            {label}
+          </label>
+        )}
 
-        <input
-          id={inputId}
-          className={inputClasses}
-          disabled={disabled}
-          {...props}
-        />
+        <div className={styles.inputWrapper}>
+          {leftIcon && <span className={styles.iconLeft}>{leftIcon}</span>}
 
-        {rightIcon && <span className={styles.iconRight}>{rightIcon}</span>}
+          <input
+            id={inputId}
+            className={inputClasses}
+            disabled={disabled}
+            {...props}
+          />
+
+          {rightIcon && <span className={styles.iconRight}>{rightIcon}</span>}
+        </div>
+
+        {typeof error === "string" && (
+          <span className={styles.errorMessage}>{error}</span>
+        )}
       </div>
-
-      {typeof error === "string" && (
-        <span className={styles.errorMessage}>{error}</span>
-      )}
-    </div>
-  );
-};
-export const Input = createUIComponent(Input_);
+    );
+  },
+);
