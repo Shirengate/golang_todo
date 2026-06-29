@@ -1,0 +1,5 @@
+services:
+  visual-testing:
+    build:
+      context: ./
+      dockerfile: Dockerfile
