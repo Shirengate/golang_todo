@@ -20,8 +20,10 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@gobs/eslint-plugin-todo": "workspace:*",
+    "@playwright/test": "^1.61.1",
     "@storybook/react-vite": "^10.4.6",
     "@storybook/test-runner": "^0.24.4",
+    "@types/jest-image-snapshot": "^6.4.1",
     "@types/node": "^24.12.3",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -31,6 +33,7 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "eslint-plugin-storybook": "^10.4.6",
     "globals": "^17.6.0",
+    "jest-image-snapshot": "^6.5.2",
     "storybook": "^10.4.6",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.59.2",

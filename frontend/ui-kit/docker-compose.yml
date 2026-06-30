@@ -1,5 +1,7 @@
 services:
   visual-testing:
     build:
-      context: ./
-      dockerfile: Dockerfile
+      context: ../
+      dockerfile: ui-kit/Dockerfile
+    volumes:
+      - ./src/components:/app/ui-kit/src/components
