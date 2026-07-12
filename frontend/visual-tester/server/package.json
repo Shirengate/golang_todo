@@ -1,7 +1,9 @@
 {
-  "name": "server",
+  "name": "@gobs/visual-test-server",
   "version": "1.0.0",
-  "description": "",
+  "private": true,
+  "description": "Visual test server",
+  "type": "module",
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
@@ -14,7 +16,8 @@
   "license": "ISC",
   "packageManager": "pnpm@10.33.0",
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "fast-glob": "^3.3.3"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",

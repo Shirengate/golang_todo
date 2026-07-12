@@ -31,6 +31,7 @@ const Button_: FC<OwnProps> = createUIComponent(
     return (
       <button {...rest} className={classes}>
         {children}
+        trtrg
       </button>
     );
   },
