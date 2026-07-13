@@ -1,14 +1,15 @@
 import { cosmiconfigSync } from "cosmiconfig";
-import type { VisualTestConfig } from "./config.types.ts";
+import type { VisualTestConfig } from "./config.types.js";
 
 const DEFAULT_CONFIG: VisualTestConfig = {
-  diffFolderName: "diff",
-  referenceFolderName: "reference",
-  diffFolderPaths: [],
+  diffFolderName: "__diff_output__",
+  referenceFolderName: "__image_snapshots__",
+  diffFolderPaths: ["src"],
   storybookRunOptions: {
     host: "localhost",
     port: 6006,
   },
+  serverPort: 3000,
 };
 
 class Config {
@@ -37,9 +38,8 @@ class Config {
     if (!Config.instance) {
       Config.instance = new Config();
     }
-    return Config.instance.config;
+    return Config.instance;
   }
 }
 
-const config = Config.getInstance().config;
-export { config };
+export { Config };

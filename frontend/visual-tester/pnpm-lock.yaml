@@ -6,15 +6,16 @@ settings:
 
 importers:
 
-  .: {}
+  .:
+    dependencies:
+      cosmiconfig:
+        specifier: ^9.0.2
+        version: 9.0.2(typescript@6.0.3)
 
   client: {}
 
   server:
     dependencies:
-      cosmiconfig:
-        specifier: ^9.0.2
-        version: 9.0.2(typescript@6.0.3)
       express:
         specifier: ^5.2.1
         version: 5.2.1

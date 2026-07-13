@@ -14,4 +14,6 @@ export interface VisualTestConfig {
   diffFolderPaths: string[];
   /** Options for launching Storybook */
   storybookRunOptions: StorybookRunOptions;
+  /** Port for the visual test server itself */
+  serverPort: number;
 }
