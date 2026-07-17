@@ -4,7 +4,7 @@ import { cosmiconfigSync } from "cosmiconfig";
 import { spawn } from "child_process";
 import { fileURLToPath } from "url";
 import path from "path";
-import waitOn from "wait-on"; // 1. Импортируем wait-on
+import waitOn from "wait-on";
 
 // ── Load config ──────────────────────────────────────────────
 const explorer = cosmiconfigSync("visual-test");

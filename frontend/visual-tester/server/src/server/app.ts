@@ -47,7 +47,7 @@ class App {
 
     // Serve built client – resolved relative to server dist
     const clientDist = new URL("../../client/dist", import.meta.url).pathname;
-    this._app.use("*", express.static(clientDist));
+    this._app.use("*splat", express.static(clientDist));
   }
 
   private _routes(): void {

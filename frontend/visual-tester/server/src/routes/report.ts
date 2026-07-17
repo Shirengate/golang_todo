@@ -59,7 +59,7 @@ export class ReportRouter implements IRouter {
       res.json(Object.values(reportMap));
     });
 
-    this.router.get("/static-assets/*", (req: Request, res: Response) => {
+    this.router.get("/static-assets/*splat", (req: Request, res: Response) => {
       const relativePath = req.params[0];
 
       if (!this.allowedList.has(relativePath)) {
