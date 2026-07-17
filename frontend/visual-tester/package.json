@@ -15,7 +15,11 @@
   "license": "ISC",
   "packageManager": "pnpm@10.33.0",
   "dependencies": {
-    "cosmiconfig": "^9.0.2"
+    "cosmiconfig": "^9.0.2",
+    "wait-on": "^9.0.10"
   },
-  "bin": "./script.js"
+  "bin": "./script.js",
+  "devDependencies": {
+    "@types/node": "^24.13.3"
+  }
 }

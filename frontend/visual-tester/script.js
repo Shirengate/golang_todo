@@ -1,49 +1,72 @@
 #!/usr/bin/env node
 
-import { spawn, execSync, spawnSync } from "node:child_process";
 import { cosmiconfigSync } from "cosmiconfig";
+import { spawn } from "child_process";
+import { fileURLToPath } from "url";
+import path from "path";
+import waitOn from "wait-on"; // 1. Импортируем wait-on
 
 // ── Load config ──────────────────────────────────────────────
 const explorer = cosmiconfigSync("visual-test");
 const result = explorer.search();
+/**
+ * @type {import("./server/src/config/config.types").VisualTestConfig}
+ */
 const config = result?.config ?? {};
-const { storybookRunOptions = {}, serverPort = 3000 } = config;
-const { host = "localhost", port = 6006 } = storybookRunOptions;
 
-const storybookUrl = `http://${host}:${port}`;
+// ---- StoryBook config ----
+const { storybookRunOptions = {} } = config; // убрал неиспользуемый serverPort
+const { host = "127.0.0.1", port = 6006 } = storybookRunOptions;
 
-// ── Main ─────────────────────────────────────────────────────
-function log(msg) {
-  console.log(`[visual-test] ${msg}`);
-}
-
-log(`Starting Storybook on ${storybookUrl}…`);
+// Storybook start
 const storybook = spawn(
   "npx",
-  ["storybook", "dev", "-p", String(port), "-h", host, "--no-open"],
-  { stdio: ["inherit", "pipe", "inherit"] },
+  ["storybook", "dev", "--host", host, "--port", String(port), "--no-open"],
+  {
+    stdio: ["inherit", "pipe", "pipe"],
+    shell: true,
+  },
 );
+storybook.stdout.pipe(process.stdout);
+storybook.stderr.pipe(process.stderr);
 
-// Wait for Storybook to be ready by listening to its stdout
-await new Promise((resolve) => {
-  storybook.stdout?.on("data", (data) => {
-    if (data.toString().includes("Storybook")) {
-      resolve();
-    }
+try {
+  await waitOn({
+    resources: [`http-get://${host}:${port}`],
+    log: true,
   });
-  // Fallback: resolve after timeout even if no matching output
-  setTimeout(resolve, 10_000);
+
+  storybook.stdout.unpipe(process.stdout);
+  storybook.stderr.unpipe(process.stderr);
+} catch (err) {
+  console.error("Storybook не ответил вовремя или произошла ошибка");
+  storybook.kill();
+  process.exit(1);
+}
+
+// run test-storybook
+const testRunnerProcces = spawn(`npx`, ["test-storybook"], {
+  stdio: "inherit",
+  shell: true,
 });
 
-log("Running test-storybook…");
-// const resul = execSync("pnpm run test-storybook", { stdio: "inherit" });
-const res = spawnSync("npx", "test-storybook");
-log("Stopping Storybook…");
-storybook.kill("SIGTERM");
+// run test-server
+testRunnerProcces.on("exit", (code) => {
+  if (code == 0) {
+    storybook.kill("SIGTERM");
+    process.exit(0);
+  }
 
-log(`Starting server on http://localhost:${serverPort}…`);
-const server = spawn("node", ["server/dist/index.js"], { stdio: "inherit" });
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  const serverPath = path.resolve(__dirname, "server/dist/index.js");
 
-server.on("close", (code) => {
-  log(`Server exited with code ${code}`);
+  const server = spawn("node", [serverPath], {
+    stdio: "inherit",
+  });
+
+  server.on("close", (code) => {
+    console.log(`Server exited with code ${code}`);
+    storybook.kill("SIGTERM");
+    process.exit(code);
+  });
 });
