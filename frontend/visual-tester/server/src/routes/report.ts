@@ -3,6 +3,7 @@ import path from "path";
 import { Config } from "../config/config.js";
 import { Router, Request, Response } from "express";
 import type { IRouter } from "./routes.types.js";
+import { proccess_path } from "../utils/proccess_path.js";
 
 export class ReportRouter implements IRouter {
   public readonly router: Router;
@@ -19,8 +20,8 @@ export class ReportRouter implements IRouter {
 
     const files = await fg(
       [
-        `**/${config.diffFolderName}/*.png`,
-        `**/${config.referenceFolderName}/*.png`,
+        `**/${config.diffFolderName}/**/*.png`,
+        `**/${config.referenceFolderName}/**/*.png`,
       ],
       {
         cwd: this.projectRoot,
@@ -38,35 +39,47 @@ export class ReportRouter implements IRouter {
     this.router.get("/api/report", async (req: Request, res: Response) => {
       const { config } = Config.getInstance();
 
-      const reportMap: Record<string, any> = {};
+      const reportMap: Record<string, { name: string, diffUrl?: string, refUrl?: string }> = {};
 
       this.allowedList.forEach((filePath) => {
-        const testId = filePath
+        const replacedPathName = filePath
           .replace(`${config.diffFolderName}/`, "")
           .replace(`${config.referenceFolderName}/`, "");
 
-        if (!reportMap[testId]) {
-          reportMap[testId] = { id: testId, name: path.basename(testId) };
+        const storyName = proccess_path(replacedPathName)
+
+        if (!reportMap[storyName]) {
+          reportMap[storyName] = { name: storyName };
         }
 
         if (filePath.includes(config.diffFolderName)) {
-          reportMap[testId].diffUrl = `/static-assets/${filePath}`;
+          reportMap[storyName].diffUrl = `/static-assets/${filePath}`;
         } else {
-          reportMap[testId].refUrl = `/static-assets/${filePath}`;
+          reportMap[storyName].refUrl = `/static-assets/${filePath}`;
         }
       });
-
-      res.json(Object.values(reportMap));
+      const onlyWithDiffs = Object.values(reportMap).filter((path) => path.diffUrl).map((item,idx) => ({...item, id:idx}))
+      res.json(onlyWithDiffs);
     });
 
     this.router.get("/static-assets/*splat", (req: Request, res: Response) => {
-      const relativePath = req.params[0];
+      const relativePath = req.params.splat
 
-      if (!this.allowedList.has(relativePath)) {
+      let resolvePath: string;
+
+      if (typeof relativePath == "string") {
+        resolvePath = relativePath
+      } else {
+        resolvePath = relativePath.join('/')
+      }
+
+      console.log(relativePath)
+      console.log(this.allowedList)
+      if (!this.allowedList.has(resolvePath)) {
         return res.status(403).send("Forbidden: File not in allowed list");
       }
 
-      const absolutePath = path.resolve(this.projectRoot, relativePath);
+      const absolutePath = path.resolve(this.projectRoot, resolvePath);
       res.sendFile(absolutePath);
     });
   }
