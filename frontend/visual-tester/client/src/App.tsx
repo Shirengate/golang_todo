@@ -6,9 +6,9 @@ import Report from './pages/Report.tsx';
 
 const App: FC = () => {
   return (
-    <div className='main_wrapper flex h-screen'>
+    <div className='main_wrapper flex min-h-screen  '>
       <Sidebar />
-      <main className='flex-1 overflow-auto'>
+      <main className='flex-1 overflow-x-hidden overflow-y-hidden  '>
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/report/:id' element={<Report />} />
