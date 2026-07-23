@@ -16,6 +16,8 @@
   "license": "ISC",
   "packageManager": "pnpm@10.33.0",
   "dependencies": {
+    "@gobs/visual-test-config": "workspace:*",
+    "@gobs/visual-test-dto": "workspace:*",
     "express": "^5.2.1",
     "fast-glob": "^3.3.3"
   },

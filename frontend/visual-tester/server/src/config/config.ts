@@ -1,16 +1,4 @@
-import { cosmiconfigSync } from "cosmiconfig";
-import type { VisualTestConfig } from "./config.types.js";
-
-const DEFAULT_CONFIG: VisualTestConfig = {
-  diffFolderName: "__diff_output__",
-  referenceFolderName: "__image_snapshots__",
-  diffFolderPaths: ["src"],
-  storybookRunOptions: {
-    host: "localhost",
-    port: 6006,
-  },
-  serverPort: 3000,
-};
+import { loadConfig, type VisualTestConfig } from "@gobs/visual-test-config";
 
 class Config {
   private static instance: Config;
@@ -19,18 +7,7 @@ class Config {
   public readonly config: VisualTestConfig;
 
   private constructor() {
-    const explorer = cosmiconfigSync("visual-test");
-    const result = explorer.search();
-    const userConfig = (result?.config ?? {}) as Partial<VisualTestConfig>;
-
-    this.config = {
-      ...DEFAULT_CONFIG,
-      ...userConfig,
-      storybookRunOptions: {
-        ...DEFAULT_CONFIG.storybookRunOptions,
-        ...userConfig.storybookRunOptions,
-      },
-    };
+    this.config = loadConfig();
   }
 
   /** Returns the singleton Config instance */

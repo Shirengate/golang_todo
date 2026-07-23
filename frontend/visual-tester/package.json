@@ -15,7 +15,7 @@
   "license": "ISC",
   "packageManager": "pnpm@10.33.0",
   "dependencies": {
-    "cosmiconfig": "^9.0.2",
+    "@gobs/visual-test-config": "workspace:*",
     "wait-on": "^9.0.10"
   },
   "bin": "./script.js",

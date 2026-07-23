@@ -1,21 +1,16 @@
 #!/usr/bin/env node
 
-import { cosmiconfigSync } from "cosmiconfig";
+import { loadConfig } from "@gobs/visual-test-config";
 import { spawn } from "child_process";
 import { fileURLToPath } from "url";
 import path from "path";
 import waitOn from "wait-on";
 
 // ── Load config ──────────────────────────────────────────────
-const explorer = cosmiconfigSync("visual-test");
-const result = explorer.search();
-/**
- * @type {import("./server/src/config/config.types").VisualTestConfig}
- */
-const config = result?.config ?? {};
+const config = loadConfig();
 
-// ---- StoryBook config ----
-const { storybookRunOptions = {} } = config; // убрал неиспользуемый serverPort
+// ── StoryBook config ─────────────────────────────────────────
+const { storybookRunOptions = {} } = config;
 const { host = "127.0.0.1", port = 6006 } = storybookRunOptions;
 
 // Storybook start
