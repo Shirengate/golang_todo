@@ -10,8 +10,8 @@ export interface VisualTestConfig {
   diffFolderName: string;
   /** Name of the folder where reference screenshots are stored */
   referenceFolderName: string;
-  /** Paths to folders that should be diffed */
-  diffFolderPaths: string[];
+  /** Name to folders with resived snapshot */
+  allowdFolderName:string
   /** Options for launching Storybook */
   storybookRunOptions: StorybookRunOptions;
   /** Port for the visual test server itself */

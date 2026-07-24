@@ -23,6 +23,7 @@ export class ReportRouter implements IRouter {
       [
         `**/${config.diffFolderName}/**/*.png`,
         `**/${config.referenceFolderName}/**/*.png`,
+        `**/${config.allowdFolderName}/**/*.png`
       ],
       {
         cwd: this.projectRoot,
@@ -37,15 +38,20 @@ export class ReportRouter implements IRouter {
   }
 
   routes() {
+    this.router.post('/allow/report/:reportName', (req: Request<{name:string}>, res: Response) => {
+      const { name } = req.params
+    })
+
     this.router.get("/api/report", async (req: Request, res: Response) => {
       const { config } = Config.getInstance();
 
-      const reportMap: Record<string, { name: string; diffUrl?: string; refUrl?: string }> = {};
+      const reportMap: Record<string, { name: string; diffUrl?: string; refUrl?: string, allowedUrl?:string }> = {};
 
       this.allowedList.forEach((filePath) => {
         const replacedPathName = filePath
           .replace(`${config.diffFolderName}/`, "")
-          .replace(`${config.referenceFolderName}/`, "");
+          .replace(`${config.referenceFolderName}/`, "")
+          .replace(`${config.allowdFolderName}/`, "");
 
         const storyName = proccess_path(replacedPathName);
 
@@ -55,10 +61,12 @@ export class ReportRouter implements IRouter {
 
         if (filePath.includes(config.diffFolderName)) {
           reportMap[storyName].diffUrl = `/static-assets/${filePath}`;
-        } else {
+        } else if (filePath.includes(config.allowdFolderName)) {
+          reportMap[storyName].allowedUrl = `/static-assets/${filePath}`;
+        }
+        else {
           reportMap[storyName].refUrl = `/static-assets/${filePath}`;
         }
-
       });
 
       const response: ReportListResponse = Object.values(reportMap)
@@ -79,8 +87,6 @@ export class ReportRouter implements IRouter {
         resolvePath = relativePath.join("/");
       }
 
-      console.log(relativePath);
-      console.log(this.allowedList);
       if (!this.allowedList.has(resolvePath)) {
         return res.status(403).send("Forbidden: File not in allowed list");
       }

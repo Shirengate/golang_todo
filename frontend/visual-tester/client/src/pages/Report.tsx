@@ -42,14 +42,14 @@ const Report: FC = () => {
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
   const { data } = useSWR<ReportListResponse>('/api/report', fetcher);
-
   const currentReport = useMemo(() => {
     return data?.find((item) => item?.id === Number(id));
   }, [data, id]);
 
   const slides = useMemo(() => {
     const items: { src: string, title?:string , descriptio?:string}[] = [];
-    if (currentReport?.refUrl) items.push({ src: currentReport.refUrl, title:'Ref url' });
+    if (currentReport?.refUrl) items.push({ src: currentReport.refUrl, title: 'Ref url' });
+    if(currentReport?.allowedUrl) items.push({src:currentReport.allowedUrl, title:'Allowed url'})
     if (currentReport?.diffUrl) items.push({ src: currentReport.diffUrl , title:'Diff rul'});
     return items;
   }, [currentReport]);
@@ -60,6 +60,7 @@ const Report: FC = () => {
     setLightboxOpen(true);
   };
 
+  const allowUrl = () => {}
   return (
     <>
       <div className='h-full flex flex-col bg-slate-950 text-slate-100'>
@@ -67,6 +68,11 @@ const Report: FC = () => {
           Report #{currentReport?.id}
         </h2>
 
+        <div className='flex justify-end px-4 py-2'>
+          <button onClick={allowUrl} className='bg-green-700 p-2 rounded-xl hover:cursor-pointer hover:opacity-90 '>
+            Allow diff
+          </button>
+        </div>
         <div className='relative flex-1 min-h-0'>
           <div className='absolute inset-0 flex flex-wrap -m-2 overflow-y-auto'>
             <ImageContainer
