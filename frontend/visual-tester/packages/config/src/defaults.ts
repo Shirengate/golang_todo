@@ -9,4 +9,6 @@ export const DEFAULT_CONFIG: VisualTestConfig = {
     port: 6006,
   },
   serverPort: 3000,
+  serverProtocol: 'http',
+  serverHost: 'localhost',
 };

@@ -2,13 +2,15 @@ import morgan from "morgan";
 import express, { type Express } from "express";
 import { Config } from "../config/config.js";
 import { ReportRouter } from "../routes/report.js";
-
+import path from 'path'
+import { fileURLToPath } from 'node:url';
+import open from 'open'
 class App {
   private static instance: App;
 
   private readonly _app: Express;
   private readonly _reportRouter: ReportRouter;
-
+  private readonly clientDist = path.resolve(path.dirname(fileURLToPath(import.meta.url)),"../../../client/dist");
   private constructor() {
     this._app = express();
     this._reportRouter = new ReportRouter();
@@ -36,24 +38,32 @@ class App {
 
     const { config } = Config.getInstance();
 
+    const serverUrl = `${config.serverProtocol}://${config.serverHost}:${config.serverPort}`;
+
     this._app.listen(config.serverPort, () => {
-      console.log(
-        `Visual test server running on http://localhost:${config.serverPort}`,
-      );
+      console.log(`Visual test server running on ${serverUrl}`);
+      open(serverUrl).then(() => {
+        console.log(`UI available at ${serverUrl}`);
+      });
     });
   }
+
 
   private _middlewares(): void {
     this._app.use(morgan("dev"));
     this._app.use(express.json());
 
     // Serve built client – resolved relative to server dist
-    const clientDist = new URL("../../client/dist", import.meta.url).pathname;
-    this._app.use("*splat", express.static(clientDist));
+    this._app.use(express.static(this.clientDist));
   }
 
   private _routes(): void {
     this._app.use(this._reportRouter.router);
+    this._app.get("*splat", (req, res) => {
+      res.sendFile(
+        path.resolve(this.clientDist, 'index.html')
+      )
+    })
   }
 }
 

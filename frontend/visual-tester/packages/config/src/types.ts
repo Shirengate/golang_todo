@@ -16,4 +16,8 @@ export interface VisualTestConfig {
   storybookRunOptions: StorybookRunOptions;
   /** Port for the visual test server itself */
   serverPort: number;
+  /** Protocol for the visual test server (http or https) */
+  serverProtocol: string;
+  /** Host for the visual test server */
+  serverHost: string;
 }

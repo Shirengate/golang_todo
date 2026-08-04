@@ -1,8 +1,8 @@
-import { useMemo, useState, type FC, type MouseEvent } from 'react';
+import { useCallback, useMemo, useState, type FC, type MouseEvent } from 'react';
 import { useParams } from 'react-router';
 import useSWR, { useSWRConfig } from 'swr';
 import { fetcher , sendRequest} from '../api';
-import type { ReportItem, ReportListResponse } from '@gobs/visual-test-dto';
+import type {  ReportListResponse } from '@gobs/visual-test-dto';
 import Lightbox from 'yet-another-react-lightbox';
 import { Captions, Zoom } from 'yet-another-react-lightbox/plugins';
 import "yet-another-react-lightbox/plugins/captions.css";
@@ -41,12 +41,12 @@ const Report: FC = () => {
   const { id } = useParams<{ id: string }>();
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
-  const { mutate} = useSWRConfig()
+  const { mutate } = useSWRConfig()
 
   const { data } = useSWR<ReportListResponse>('/api/report', fetcher);
 
   const { trigger, isMutating } = useSWRMutation('/allow/report', sendRequest, {
-    onSuccess:() => mutate('/api/report')
+    onSuccess: () => mutate('/api/report')
   })
 
   const currentReport = useMemo(() => {
@@ -54,12 +54,17 @@ const Report: FC = () => {
   }, [data, id]);
 
   const slides = useMemo(() => {
-    const items: { src: string, title?:string , descriptio?:string}[] = [];
+    const items: { src: string, title?: string, descriptio?: string }[] = [];
     if (currentReport?.refUrl) items.push({ src: currentReport.refUrl, title: 'Ref url' });
-    if(currentReport?.allowedUrl) items.push({src:currentReport.allowedUrl, title:'Allowed url'})
-    if (currentReport?.diffUrl) items.push({ src: currentReport.diffUrl , title:'Diff rul'});
+    if (currentReport?.allowedUrl) items.push({ src: currentReport.allowedUrl, title: 'Allowed url' })
+    if (currentReport?.diffUrl) items.push({ src: currentReport.diffUrl, title: 'Diff rul' });
     return items;
   }, [currentReport]);
+
+  const allowReport = useCallback(async () => {
+    if(!currentReport) return
+    await trigger(currentReport)
+  }, [trigger])
 
   const handleImageClick = (clickedUrl?: string) => {
     const index = slides.findIndex((slide) => slide.src === clickedUrl);
@@ -75,7 +80,7 @@ const Report: FC = () => {
         </h2>
 
         <div className='flex justify-end px-4 py-2'>
-          <button onClick={() => trigger(currentReport)} disabled={isMutating} className='bg-green-700 p-2 rounded-xl hover:cursor-pointer hover:opacity-90'>
+          <button onClick={allowReport} disabled={isMutating} className='bg-green-700 p-2 rounded-xl hover:cursor-pointer hover:opacity-90'>
             Allow diff
           </button>
         </div>

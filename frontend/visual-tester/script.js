@@ -5,7 +5,6 @@ import { spawn } from "child_process";
 import { fileURLToPath } from "url";
 import path from "path";
 import waitOn from "wait-on";
-
 // ── Load config ──────────────────────────────────────────────
 const config = loadConfig();
 
@@ -41,7 +40,7 @@ try {
 }
 
 // run test-storybook
-const testRunnerProcces = spawn(`npx`, ["test-storybook", '--url', `http://${host}:${port}`], {
+const testRunnerProcces = spawn(`npx`, ["test-storybook", '--url', `${config.serverProtocol}://${host}:${port}`], {
   stdio: "inherit",
   shell: true,
 });
