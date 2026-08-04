@@ -1,11 +1,11 @@
 import fg from "fast-glob";
 import path from "path";
-import type { ReportListResponse } from "@gobs/visual-test-dto";
+import type { ReportItem, ReportListResponse } from "@gobs/visual-test-dto";
 import { Config } from "../config/config.js";
 import { Router, Request, Response } from "express";
 import type { IRouter } from "./routes.types.js";
 import { proccess_path } from "../utils/proccess_path.js";
-
+import { deleteFile, moveFile} from '../helpers/file.js'
 export class ReportRouter implements IRouter {
   public readonly router: Router;
   private projectRoot = process.cwd();
@@ -38,8 +38,28 @@ export class ReportRouter implements IRouter {
   }
 
   routes() {
-    this.router.post('/allow/report/:reportName', (req: Request<{name:string}>, res: Response) => {
-      const { name } = req.params
+    this.router.post('/allow/report', async (req: Request<any,any,ReportItem>, res: Response) => {
+      const { allowedUrl, refUrl, diffUrl } = req.body;
+
+      if (allowedUrl == undefined || refUrl == undefined || diffUrl == undefined) {
+        res.status(400).json({
+          message:"Передайте ref и allow url"
+        })
+        return
+      }
+
+      const stripPrefix = (url: string) => url.replace(/^\/static-assets\//, '');
+
+      await moveFile(stripPrefix(allowedUrl), stripPrefix(refUrl), this.projectRoot);
+
+      await deleteFile(stripPrefix(diffUrl), this.projectRoot)
+
+
+      // update current info about diffs
+
+      await this.initialize()
+
+      res.json({ ok: true });
     })
 
     this.router.get("/api/report", async (req: Request, res: Response) => {
@@ -94,5 +114,7 @@ export class ReportRouter implements IRouter {
       const absolutePath = path.resolve(this.projectRoot, resolvePath);
       res.sendFile(absolutePath);
     });
+
+
   }
 }

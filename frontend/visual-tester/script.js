@@ -9,6 +9,7 @@ import waitOn from "wait-on";
 // ── Load config ──────────────────────────────────────────────
 const config = loadConfig();
 
+
 // ── StoryBook config ─────────────────────────────────────────
 const { storybookRunOptions = {} } = config;
 const { host = "127.0.0.1", port = 6006 } = storybookRunOptions;
@@ -40,7 +41,7 @@ try {
 }
 
 // run test-storybook
-const testRunnerProcces = spawn(`npx`, ["test-storybook"], {
+const testRunnerProcces = spawn(`npx`, ["test-storybook", '--url', `http://${host}:${port}`], {
   stdio: "inherit",
   shell: true,
 });

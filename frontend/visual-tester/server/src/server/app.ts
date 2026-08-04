@@ -1,3 +1,4 @@
+import morgan from "morgan";
 import express, { type Express } from "express";
 import { Config } from "../config/config.js";
 import { ReportRouter } from "../routes/report.js";
@@ -43,6 +44,7 @@ class App {
   }
 
   private _middlewares(): void {
+    this._app.use(morgan("dev"));
     this._app.use(express.json());
 
     // Serve built client – resolved relative to server dist

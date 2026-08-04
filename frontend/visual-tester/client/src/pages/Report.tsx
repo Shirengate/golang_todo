@@ -1,12 +1,13 @@
 import { useMemo, useState, type FC, type MouseEvent } from 'react';
 import { useParams } from 'react-router';
-import useSWR from 'swr';
-import { fetcher } from '../api';
-import type { ReportListResponse } from '@gobs/visual-test-dto';
+import useSWR, { useSWRConfig } from 'swr';
+import { fetcher , sendRequest} from '../api';
+import type { ReportItem, ReportListResponse } from '@gobs/visual-test-dto';
 import Lightbox from 'yet-another-react-lightbox';
 import { Captions, Zoom } from 'yet-another-react-lightbox/plugins';
 import "yet-another-react-lightbox/plugins/captions.css";
 import 'yet-another-react-lightbox/styles.css';
+import useSWRMutation from 'swr/mutation';
 
 interface ImageContainerProps {
   url?: string;
@@ -40,8 +41,14 @@ const Report: FC = () => {
   const { id } = useParams<{ id: string }>();
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const { mutate} = useSWRConfig()
 
   const { data } = useSWR<ReportListResponse>('/api/report', fetcher);
+
+  const { trigger, isMutating } = useSWRMutation('/allow/report', sendRequest, {
+    onSuccess:() => mutate('/api/report')
+  })
+
   const currentReport = useMemo(() => {
     return data?.find((item) => item?.id === Number(id));
   }, [data, id]);
@@ -60,7 +67,6 @@ const Report: FC = () => {
     setLightboxOpen(true);
   };
 
-  const allowUrl = () => {}
   return (
     <>
       <div className='h-full flex flex-col bg-slate-950 text-slate-100'>
@@ -69,7 +75,7 @@ const Report: FC = () => {
         </h2>
 
         <div className='flex justify-end px-4 py-2'>
-          <button onClick={allowUrl} className='bg-green-700 p-2 rounded-xl hover:cursor-pointer hover:opacity-90 '>
+          <button onClick={() => trigger(currentReport)} disabled={isMutating} className='bg-green-700 p-2 rounded-xl hover:cursor-pointer hover:opacity-90'>
             Allow diff
           </button>
         </div>

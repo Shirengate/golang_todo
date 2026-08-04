@@ -9,6 +9,8 @@ export default defineConfig({
     proxy: {
       '/api': 'http://localhost:3000',
       '/static-assets': 'http://localhost:3000',
+      "/allow":"http://localhost:3000"
+
     },
   },
 })

@@ -9,6 +9,7 @@ const config: TestRunnerConfig = {
       storeReceivedOnFailure:true
     });
   },
+
 };
 
 export default config;

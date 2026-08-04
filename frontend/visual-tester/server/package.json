@@ -19,10 +19,12 @@
     "@gobs/visual-test-config": "workspace:*",
     "@gobs/visual-test-dto": "workspace:*",
     "express": "^5.2.1",
-    "fast-glob": "^3.3.3"
+    "fast-glob": "^3.3.3",
+    "morgan": "^1.11.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
+    "@types/morgan": "^1.9.10",
     "@types/node": "^24.13.2",
     "tsx": "^4.23.0",
     "typescript": "^6.0.3"

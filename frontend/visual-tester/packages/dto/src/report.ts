@@ -6,4 +6,6 @@ export interface ReportItem {
   allowedUrl?:string
 }
 
+
+
 export type ReportListResponse = ReportItem[];
