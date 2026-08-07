@@ -53,7 +53,7 @@ testRunnerProcces.on("exit", (code) => {
   }
 
   const __dirname = path.dirname(fileURLToPath(import.meta.url));
-  const serverPath = path.resolve(__dirname, "server/dist/index.js");
+  const serverPath = path.resolve(__dirname, "dist/index.js");
 
   const server = spawn("node", [serverPath], {
     stdio: "inherit",

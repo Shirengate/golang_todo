@@ -10,7 +10,7 @@ class App {
 
   private readonly _app: Express;
   private readonly _reportRouter: ReportRouter;
-  private readonly clientDist = path.resolve(path.dirname(fileURLToPath(import.meta.url)),"../../../client/dist");
+  private readonly clientDist = fileURLToPath(import.meta.resolve("@gobs/vusual-test-client/dist"));
   private constructor() {
     this._app = express();
     this._reportRouter = new ReportRouter();

@@ -7,10 +7,11 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
+    "build": "tsdown",
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit"
   },
+  "bin": "./script.js",
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -18,9 +19,13 @@
   "dependencies": {
     "@gobs/visual-test-config": "workspace:*",
     "@gobs/visual-test-dto": "workspace:*",
+    "@gobs/vusual-test-client": "workspace:*",
     "express": "^5.2.1",
     "fast-glob": "^3.3.3",
-    "morgan": "^1.11.0"
+    "morgan": "^1.11.0",
+    "open": "^11.0.0",
+    "tsdown": "^0.22.14",
+    "wait-on": "^9.0.10"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
